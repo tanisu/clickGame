@@ -250,5 +250,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WhiteChipPrefab: {fileID: 1817702167611917814, guid: 0086e59a7bdade046959c79c1685398d, type: 3}
+  BlackChipPrefab: {fileID: 7680315888790877085, guid: 5f08956f599ee14469ba8f4ca10184d5, type: 3}
   w: 80
   h: 80
