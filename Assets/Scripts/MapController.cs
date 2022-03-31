@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class MapController : MonoBehaviour
 {
+    
     [SerializeField] GameObject WhiteChipPrefab,BlackChipPrefab;
     BlackChipController blackChipController;
     [SerializeField] int w, h;
+    [SerializeField] TargetController target;
     float chipSize;
     List<GameObject> whiteChips;
     int idx;
@@ -31,24 +33,38 @@ public class MapController : MonoBehaviour
             }
         }
 
+        GameManager.I.mapChipsCount = whiteChips.Count;
+
         blackChipController = Instantiate(BlackChipPrefab,transform.position,Quaternion.identity,transform)
             .GetComponent<BlackChipController>();
 
         idx = Random.Range(0, whiteChips.Count);
         
-        whiteChips[idx].GetComponent<SpriteRenderer>().color = Color.red;
         blackChipController.Move(whiteChips[idx].transform.position);
+
+        target.xLimit = whiteChips[whiteChips.Count - 1].transform.position.x;
+        target.yLimit = whiteChips[whiteChips.Count - 1].transform.position.y;
+        
     }
 
     
     void Update()
     {
+        if(GameManager.I.gameMode == GameManager.GAMEMODE.GAMEOVER)
+        {
+            return;
+        }
+
         if (!blackChipController.isMoving)
         {
-            whiteChips[idx].GetComponent<SpriteRenderer>().color = Color.white;
             idx = Random.Range(0, whiteChips.Count);
-            whiteChips[idx].GetComponent<SpriteRenderer>().color = Color.red;
             blackChipController.Move(whiteChips[idx].transform.position);
+        }
+
+        if (blackChipController.isTargetting && Input.GetMouseButtonDown(0))
+        {
+            blackChipController.TurnColor();
+            GameManager.I.UpdateRate();
         }
     }
 }
